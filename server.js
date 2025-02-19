@@ -23,27 +23,24 @@ let posts = [
 // get all post
 // adding query strings
 app.get("/api/posts", (req, res) => {
-    const limit  = parseInt(req.query.limit)
+    const limit = parseInt(req.query.limit)
     // console.log(limit)
-    if(!isNaN(limit) && limit > 0){
-        res.status(200).json(posts.slice(0,limit))
+    if (!isNaN(limit) && limit > 0) {
+        return res.status(200).json(posts.slice(0, limit))
     }
-    else{
-        res.json(posts) 
-    }
+    res.json(posts)
 })
 
 // get single post 
 
-app.get("/api/posts/:id", (req, res)=>{
+app.get("/api/posts/:id", (req, res) => {
     const id = parseInt(req.params.id)
-    const post = posts.find((post)=> post.id == id)
+    const post = posts.find((post) => post.id == id)
     console.log(post)
-    if(!post){
-        res.status(404).json({"msg": `post on id: ${id} is not available `})
-    }else{
-        res.json(post)
+    if (!post) {
+        return res.status(404).json({ "msg": `post on id: ${id} is not available ` })
     }
+    res.json(post)
 })
 
 
