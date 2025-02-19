@@ -1,6 +1,7 @@
-const express = require('express');
-const post = require('./routes/posts.route.js')
-require("dotenv").config()
+import express from 'express';
+import post  from './routes/posts.route.js';
+import dotenv from "dotenv"
+dotenv.config()
 
 const app = express();
 const port = process.env.PORT || 8090;
