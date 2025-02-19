@@ -21,8 +21,16 @@ let post = [
 ];
 
 // get all post
+// adding query strings
 app.get("/api/posts", (req, res) => {
-    res.json(post)
+    const limit  = parseInt(req.query.limit)
+    // console.log(limit)
+    if(!isNaN(limit) && limit > 0){
+        res.json(post.slice(0,limit))
+    }
+    else{
+        res.json(post) 
+    }
 })
 
 // get single post 
