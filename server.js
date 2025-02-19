@@ -1,14 +1,15 @@
 const express = require('express');
+const path = require('path')
 
 const app = express();
 
 const port = 4090;
 
 app.get("/", (req, res)=>{
-    res.send("Hello Home")
+    res.sendFile(path.join(__dirname,"public","index.html"))
 })
 app.get("/about", (req, res)=>{
-    res.send("Hello about")
+    res.sendFile(path.join(__dirname,"public","about.html"))
 })
 
 
