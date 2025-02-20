@@ -32,13 +32,28 @@ router.get("/", (req, res) => {
 router.get("/:id", (req, res) => {
     const id = parseInt(req.params.id)
     const post = posts.find((post) => post.id == id)
-    console.log(post)
+    // console.log(post)
     if (!post) {
         return res.status(404).json({ "msg": `post on id: ${id} is not available ` })
     }
     res.json(post)
 })
 
+
+// creating a post request to posts
+router.post("/", (req, res)=>{
+    console.log(req.body)
+
+    const newPost = {
+        id: posts.length + 1,
+        title: req.body.title
+    }
+    if(!newPost.title){
+        return res.status(404).json({msg: `Title is necessary`})
+    }
+    posts.push(newPost)
+    res.status(201).json(posts)
+})
 
 
 export default router
