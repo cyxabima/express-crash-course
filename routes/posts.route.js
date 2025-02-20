@@ -17,7 +17,7 @@ let posts = [
 // get all post
 // adding query strings
 // since we are defining router in middleware in server.js if we also define here it will become redundant
-router.get("/", (req, res) => {
+router.get("/", (req, res, next) => {
     const limit = parseInt(req.query.limit)
     // console.log(limit)
     if (!isNaN(limit) && limit > 0) {
@@ -29,12 +29,14 @@ router.get("/", (req, res) => {
 
 // get single post 
 
-router.get("/:id", (req, res) => {
+router.get("/:id", (req, res, next) => {
     const id = parseInt(req.params.id)
     const post = posts.find((post) => post.id == id)
     // console.log(post)
     if (!post) {
-        return res.status(404).json({ "msg": `post on id: ${id} is not available ` })
+        const error = new Error(`A post with id ${id} don't exist`)
+        error.status = 404
+        next(error)
     }
     res.json(post)
 })
@@ -49,7 +51,9 @@ router.post("/", (req, res) => {
         title: req.body.title
     }
     if (!newPost.title) {
-        return res.status(404).json({ msg: `Title is necessary` })
+        const error = new Error(`title is not defined`)
+        error.status = 404
+        next(error)
     }
     posts.push(newPost)
     res.status(201).json(posts)
@@ -57,24 +61,28 @@ router.post("/", (req, res) => {
 
 // updating post 
 
-router.put("/:id", (req, res) => {
+router.put("/:id", (req, res, next) => {
     const id = parseInt(req.params.id);
 
     const post = posts.find((post) => post.id === id)
 
     if (!post) {
-        return res.status(404).json({ msg: "Post not found" })
+        const error = new Error(`A post with id ${id} don't exist`)
+        error.status = 400
+        return next(error)
     }
     post.title = req.body.title
     res.status(200).json(posts)
 })
 
-router.delete("/:id", (req, res) => {
+router.delete("/:id", (req, res, next) => {
     const id = parseInt(req.params.id);
-    const post =  posts.find((post)=> post.id === id)
+    const post = posts.find((post) => post.id === id)
 
     if (!post) {
-        return res.status(404).json({ msg: "Post not found" })
+        const error = new Error(`post with this id doesn't exist`)
+        error.status = 400
+        return next(error)
     }
     posts = posts.filter((post) => post.id !== id)
     res.status(200).json(posts)
