@@ -41,18 +41,32 @@ router.get("/:id", (req, res) => {
 
 
 // creating a post request to posts
-router.post("/", (req, res)=>{
+router.post("/", (req, res) => {
     console.log(req.body)
 
     const newPost = {
         id: posts.length + 1,
         title: req.body.title
     }
-    if(!newPost.title){
-        return res.status(404).json({msg: `Title is necessary`})
+    if (!newPost.title) {
+        return res.status(404).json({ msg: `Title is necessary` })
     }
     posts.push(newPost)
     res.status(201).json(posts)
+})
+
+// updating post 
+
+router.put("/:id", (req, res) => {
+    const id = parseInt(req.params.id);
+
+    const post = posts.find((post) => post.id === id)
+
+    if (!post) {
+        return res.status(404).json({ msg: "Post not found" })
+    }
+    post.title = req.body.title
+    res.status(200).json(posts)
 })
 
 
