@@ -1,6 +1,7 @@
 import express from 'express';
 import post  from './routes/posts.route.js';
 import dotenv from "dotenv"
+import logger from './middleware/logger.js';
 dotenv.config()
 
 const app = express();
@@ -8,6 +9,8 @@ const port = process.env.PORT || 8090;
 
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
+// setting up the logger middleware 
+app.use(logger)
 app.use("/api/posts", post)
 
 // setup static folder
